@@ -119,6 +119,30 @@ strong{color:var(--sky);font-weight:700}
 .step-node{transition:fill .4s}
 .step-node.lit{fill:var(--gold)}
 
+
+/* 第8章 引き出しのある家 */
+.drawer{transform-box:fill-box}
+.play .drawer{animation:drawer 3.2s ease-in-out 2.6s both}
+@keyframes drawer{0%{transform:translateX(0)}25%{transform:translateX(40px)}75%{transform:translateX(40px)}100%{transform:translateX(0)}}
+.play .jsonfly{animation:jsonfly 2.2s ease-in-out 3.2s both}
+@keyframes jsonfly{0%{transform:translate(-150px,-34px);opacity:0}15%{opacity:1}100%{transform:translate(0,0);opacity:1}}
+.bookcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:12px 4px 4px}
+.bcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.8}
+.bcard .bt{font-family:var(--display);font-weight:600;font-size:16px}
+.bcard .bd{color:var(--muted);font-size:12px;border-top:1px dashed var(--line);margin-top:6px;padding-top:6px}
+.bcard .bb{display:none;margin-top:6px}
+.bcard.open .bb{display:block}
+.bcard .bb b{display:block;color:var(--wood);font-size:11px;letter-spacing:.1em}
+.bcard .tg{margin-top:8px;font:500 13px var(--body);color:var(--sky);background:transparent;border:1px solid var(--sky);border-radius:999px;padding:2px 14px;cursor:pointer}
+.watch{font-family:var(--mono);font-size:12.5px;color:#c9d3e6;background:#1f2738;border-radius:8px;padding:8px 12px;margin:10px 4px 4px;min-height:2.4em}
+
+
+.himekuri{margin:12px 4px 4px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;text-align:center}
+.himekuri .hd{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.himekuri .ht{font-family:var(--display);font-size:20px;line-height:1.7;margin:8px 0 4px;transition:opacity .4s}
+.himekuri .hw{font-size:13px;color:var(--wood)}
+.himekuri.flip .ht,.himekuri.flip .hw{opacity:0}
+
 /* インタラクティブ部品 */
 .controls{display:flex;flex-wrap:wrap;gap:10px;margin:10px 4px 4px;align-items:center}
 .btn{font:700 15px var(--body);color:#fff;background:var(--sky);border:0;border-radius:10px;padding:9px 18px;cursor:pointer;box-shadow:0 3px 0 #2a4372}
@@ -478,8 +502,158 @@ footer{max-width:860px;margin:0 auto;padding:30px 20px 70px;color:var(--muted);f
   </div>
 </section>
 
+<!-- 第八章 -->
+<section class="ch" id="ch8" data-title="第八章">
+  <div class="tag">第八章　第4回 JavaScript②（localStorage）</div>
+  <h2>引き出しのある家</h2>
+  <div class="scene">
+    <button class="replay" type="button">もう一度</button>
+    <svg viewBox="0 0 600 300" role="img" aria-label="1冊分のメモが荷物にまとめられ、一枚の紙にたたまれて、家の引き出しにしまわれる">
+      <!-- メモ -->
+      <g class="pop d1">
+        <rect x="24" y="60" width="104" height="128" rx="6" fill="#fff" stroke="var(--ink)" stroke-width="2"/>
+        <text x="76" y="84" text-anchor="middle" font-size="13" class="svg-strong">読書メモ</text>
+        <text x="36" y="108" class="svg-label" font-size="11.5">ハイライト</text>
+        <text x="36" y="128" class="svg-label" font-size="11.5">発見</text>
+        <text x="36" y="148" class="svg-label" font-size="11.5">比較</text>
+        <text x="36" y="168" class="svg-label" font-size="11.5">質問</text>
+      </g>
+      <text x="76" y="212" text-anchor="middle" class="svg-label fade d1">書きとめる</text>
+      <path class="fade d2" d="M136 124 h30" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar8)"/>
+      <defs><marker id="ar8" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="var(--muted)"/></marker></defs>
+      <!-- 荷物 -->
+      <g class="pop d2">
+        <rect x="176" y="92" width="104" height="66" rx="6" fill="#f7e2bd" stroke="var(--wood)" stroke-width="2"/>
+        <path d="M176 112 h104" stroke="var(--wood)" stroke-width="2"/>
+        <text x="228" y="140" text-anchor="middle" font-size="12" class="mono" fill="var(--ink)">{ title, day… }</text>
+      </g>
+      <text x="228" y="182" text-anchor="middle" class="svg-label fade d2">荷物（オブジェクト）</text>
+      <text x="228" y="200" text-anchor="middle" class="svg-label fade d3">箱に入れる（push）</text>
+      <!-- たたむ -->
+      <text x="228" y="232" text-anchor="middle" class="mono fade d4" font-size="12" fill="var(--sky)">JSON.stringify</text><text x="228" y="250" text-anchor="middle" class="svg-label fade d4">（たたんで一枚の紙に）</text>
+      <!-- 家 -->
+      <polygon points="470,30 380,92 560,92" fill="#c9d6ee" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="392" y="92" width="156" height="128" fill="#fbe7c4" stroke="var(--ink)" stroke-width="2"/>
+      <!-- たんす -->
+      <rect x="420" y="128" width="100" height="78" rx="4" fill="var(--wood)" opacity=".85"/>
+      <!-- しまわれる紙（最後は引き出しの中） -->
+      <g class="jsonfly"><g transform="translate(452 128)"><rect width="36" height="26" rx="2" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/><text x="18" y="17" text-anchor="middle" font-size="9" class="mono" fill="var(--sky)">"[{…}]"</text></g></g>
+      <!-- 引き出し -->
+      <g class="drawer"><rect x="426" y="150" width="88" height="24" rx="3" fill="#c98a4f" stroke="#7d5129" stroke-width="1.5"/><circle cx="470" cy="162" r="3" fill="#7d5129"/></g>
+      <rect x="426" y="180" width="88" height="20" rx="3" fill="#c98a4f" stroke="#7d5129" stroke-width="1.5"/><circle cx="470" cy="190" r="3" fill="#7d5129"/>
+      <text x="470" y="244" text-anchor="middle" class="svg-strong" font-size="14">引き出し（localStorage）</text>
+      <text x="470" y="266" text-anchor="middle" class="svg-label fade d8">戸を閉めても、残っている</text>
+      <text x="470" y="288" text-anchor="middle" class="mono fade d9" font-size="11.5" fill="var(--sky)">取り出すときは JSON.parse で広げる</text>
+    </svg>
+  </div>
+  <div class="text">
+    <p>これまで牧子さんが建ててきた家には、ひとつ困ったことがありました。家を出て戸を閉めると、中に書いたものが、すべて消えてしまうのです。旅の切符も、くじの結果も、次に来たときには真っ白。まるで、毎晩だれかが黒板を消していくようでした。</p>
+    <p>この日の授業で、家に<strong>引き出し</strong>がつきました（localStorage）。戸を閉めても、引き出しにしまったものは、ちゃんと残っています。</p>
+    <p>ただ、この引き出しは少し変わっていて、<strong>文字しか入りません</strong>。荷物をそのまま押しこもうとしても、入らないのです。そこで牧子さんは、しまう前に荷物をたたんで、一枚の紙にする方法を覚えました（JSON.stringify）。取り出すときは、その紙をそっと広げて、もとの荷物にもどします（JSON.parse）。</p>
+    <p>さて、この引き出しに、何をしまおう。</p>
+    <p>牧子さんは最初、ことのはの「みっつのいいこと」を書くメモ帳にしようと考えました。けれど授業が終わるころ、本棚のことが頭に浮かびます。読んだはずなのに、もう思い出せない本たち。面白かったのに、人に聞かれると「よかったよ」としか言えない本たち。</p>
+    <p>三宅香帆さんの本に、こんな読み方が書いてありました。心に残った一文を拾い、そこから気づいたことを書き、ほかの本とくらべ、問いを残す。本と自分のあいだに起きたことを、残しておく読み方です。</p>
+    <p>「これを、引き出しにしまえる家にしたい」。牧子さんは、そう決めました。</p>
+    <p>まず、手書きのメモで間取りを考えました。書く机と、読み返す棚。欄は「ハイライト」「発見」「比較」「質問」の4つです。</p>
+    <p>それからAIに、完成した家の模型をつくってもらいました（見本）。牧子さんは、その模型を丸ごと運びこむことはしません。模型を横に置いて、柱を一本ずつ、自分の手で立てていきました。</p>
+    <p>1冊分のメモは、ひとつの<strong>荷物</strong>にまとめます（オブジェクト）。荷物には、その日の日付と曜日の札をつけます（Date と曜日の配列）。荷物は<strong>箱</strong>にどんどん入れていきます（配列）。棚に並べるときは、箱の中の荷物を、新しいものから1つずつ取り出して、カードにして置いていきます（for と append）。</p>
+    <p>組み立てていると、家のあちこちで、小さな事件が起きました。</p>
+    <p>ある日、「全部消す」の札が、書く欄の上に、ずうずうしく乗っかっていました。調べてみると、書く欄の箱に「いくらでも縮んでいいよ」と言ってあったのが原因でした（min-height: 0）。箱が中身より小さく縮み、はみ出した中身の上に、札が置かれていたのです。</p>
+    <p>ページ番号の欄は、つけてみたものの、メモの中に直接書くほうが自然だと気づいて、取りはずすことにしました。ところが、家の中には「ページ」と書かれた場所が、4か所もありました。1か所でも残っていると、家は「ページって、だれのこと？」と首をかしげて、止まってしまいます。</p>
+    <p>字の形も、細い明朝体から、読みやすいゴシック体に着がえさせました。</p>
+  </div>
+
+  <div class="scene">
+    <div class="note" style="margin:4px 4px 0">押してみてください。開く前に、何が書いてあったか思い出してみるのがコツです。</div>
+    <div class="bookcards" id="cards8">
+      <div class="bcard">
+        <div class="bt">「はじめての読書メモ」</div>
+        <div class="bb"><b>ハイライト</b>引き出しには、文字しか入らない。<b>発見</b>だから、たたんでしまう。</div>
+        <div class="bd">2026年11月17日（火）</div>
+        <button class="tg" type="button">開く</button>
+      </div>
+      <div class="bcard">
+        <div class="bt">「覚えておくための本」</div>
+        <div class="bb"><b>比較</b>読み返すより、思い出すほうが残る。<b>質問</b>一週間後、何を覚えているだろう？</div>
+        <div class="bd">2026年11月18日（水）</div>
+        <button class="tg" type="button">開く</button>
+      </div>
+    </div>
+    <div class="watch" id="watch8">#list の番人：「開く」が押されるのを待っています…</div>
+  </div>
+  <div class="text">
+    <p>作っている途中で、牧子さんの中で、このメモの<strong>目的</strong>が少しずつ変わっていきました。書きとめるだけでは、また忘れてしまう。読んだ本を、<strong>覚えておく</strong>ためのメモにしたい。</p>
+    <p>そこで、カードにはタイトルと日付だけを出しておくことにしました。「開く」を押すと、はじめて中身が見えます。開く前に、「あの本で、私は何を書いたっけ」と、一度思い出してみるための扉です。</p>
+    <p>この扉には、ちょっとした仕掛けが必要でした。「開く」ボタンは、家を建てたときには、まだどこにもありません。メモを書きとめたあとに、あとから生まれてくるのです。まだ生まれていないボタンに、「押されたら教えてね」と頼むことはできません。</p>
+    <p>そこで牧子さんは、最初から家にいる<strong>棚の番人</strong>（#list）に、こう頼みました。「この棚のどこかで『開く』が押されたら、教えてね」。</p>
+    <p>番人は、押されたカードに <strong>open</strong> という名札をつけたり、はずしたりします。家の決まりは「名札があれば中身を見せる、なければ隠す」。仕掛けは、たったそれだけでした。</p>
+    <p>ほかにも、話しかけると文字になる窓（音声入力）や、言葉を打つとそのメモだけが並ぶ棚（言葉でさがす）がつきました。書く部屋と読み返す部屋を分ける扉（タブ）、日付を選べる暦（カレンダー）もつきました。</p>
+    <p>家ができると、牧子さんは、自分で住んでみることにしました。いつもの本のメモを、毎日書いてみたのです。</p>
+    <p>すると、思いがけないことが起きました。書いた本が、頭に残るのです。4つの欄が、「読んだ」で終わらせてくれない。心に残った一文を拾い、自分の気づきを言葉にし、ほかの本とつなげ、問いを残す。そのたびに、本が自分の中で組み立て直されていきます。人に話したいことまで、いつのまにか整理されていました。</p>
+    <p>住んでみると、足りないものも見えてきました。だれが書いた本なのか。Kindleで読んだのか、紙の本で読んだのか。そこで、著者名の欄と、どちらか一つだけを選べる丸い札（ラジオボタン）を足しました。</p>
+    <p>書きまちがいや、あとから思いついたことを足したいときのために、<strong>「直す」</strong>ボタンもつけました。</p>
+    <p>ところが、直したはずのメモが、棚に<strong>2枚</strong>並んでいました。元のメモと、直したメモ。まるで双子のようです。</p>
+    <p>原因は、荷物のしまい方でした。新しいメモは、箱のうしろに足していきます（push）。けれど、直したメモまで同じように足すと、箱の中に、同じ本のメモが2つになってしまいます。直すときは、元の荷物があった<strong>その場所に、入れかえる</strong>のです（records[番号] = …）。</p>
+    <p>そのために牧子さんは、家に小さなメモ用紙を1枚置きました。「いま、何番目の荷物を直しているか」を書いておく紙です（editing）。何も直していないときは、からっぽにしておきます（null）。日付の札は、元の荷物から、そっと付けかえておきます。双子のカードは、もう現れなくなりました。</p>
+    <p>もうひとつ、タイトルを押すと、その本のメモだけが並ぶようにしました。新しい道具は作っていません。「言葉でさがす」の棚に、タイトルの文字を手渡すだけです（word と showList）。1冊ごとの、小さな本棚ができました。</p>
+    <p>それでも、読み返す部屋は、どこか<strong>地味</strong>でした。カードが並んでいるだけで、入ったときに、ふっと心が動くものがない。</p>
+    <p>まだ外が暗い朝、牧子さんは、言葉を集めはじめました。本を読むこと、学ぶことについて、昔の人が残した言葉です。徒然草の「見ぬ世の人を友とする」、ベーコンの「ごく少数の本は、よくかんで消化すべき」、論語の「学びて思わざれば…」。</p>
+    <p>集めた言葉は、箱に入れました（sayings）。毎日ひとつずつ、<strong>日めくり</strong>のように出すためです。</p>
+    <p>仕掛けは、こうです。2026年1月1日から、今日まで何日たったかを数えます（Date の引き算）。その日数を、言葉の数でわって、<strong>あまり</strong>を出します（%）。あまりは、いつも0から「言葉の数より1つ少ない数」のあいだ。だから、毎日ちがう言葉が出て、全部出しきると、また最初の言葉にもどってきます。言葉が、日めくりの輪になって、ゆっくり回りはじめました。</p>
+  </div>
+
+
+  <div class="scene">
+    <div class="note" style="margin:4px 4px 0">「1日すすめる」を押すと、日めくりがめくれます。言葉は4つなので、4日ごとに最初にもどります。</div>
+    <div class="himekuri" id="hime8">
+      <div class="hd" id="hime8d"></div>
+      <div class="ht" id="hime8t"></div>
+      <div class="hw" id="hime8w"></div>
+    </div>
+    <div class="controls"><button class="btn" type="button" id="hime8b">1日すすめる</button><span class="note mono" id="hime8m"></span></div>
+  </div>
+  <div class="scene">
+    <button class="replay" type="button">もう一度</button>
+    <svg viewBox="0 0 600 220" role="img" aria-label="OneDriveの棚の上の箱から書庫へ送り、書庫から gs の机に呼びもどす">
+      <!-- OneDrive の棚 -->
+      <path d="M44 74 a22 22 0 0 1 40 -10 a18 18 0 0 1 34 10 a16 16 0 0 1 0 32 h-74 a16 16 0 0 1 0 -32z" fill="#e6e9f0" stroke="var(--muted)"/>
+      <rect x="66" y="76" width="40" height="26" rx="3" fill="#f7e2bd" stroke="var(--wood)" stroke-width="1.5"/>
+      <text x="86" y="134" text-anchor="middle" class="svg-label">OneDrive の棚の上</text>
+      <!-- 書庫 -->
+      <polygon points="230,56 370,56 300,22" fill="var(--sky)"/>
+      <rect x="240" y="56" width="120" height="96" fill="#dfe6f2" stroke="var(--sky)" stroke-width="2"/>
+      <rect x="280" y="92" width="40" height="26" rx="3" fill="#f7e2bd" stroke="var(--wood)" stroke-width="1.5" class="pop d3"/>
+      <text x="300" y="172" text-anchor="middle" class="svg-label">書庫（GitHub）</text>
+      <!-- gs の机 -->
+      <rect x="440" y="120" width="140" height="12" rx="3" fill="var(--wood)"/>
+      <rect x="452" y="132" width="9" height="40" fill="var(--wood)"/><rect x="560" y="132" width="9" height="40" fill="var(--wood)"/>
+      <rect x="490" y="94" width="40" height="26" rx="3" fill="#f7e2bd" stroke="var(--wood)" stroke-width="1.5" class="pop d7"/>
+      <text x="510" y="194" text-anchor="middle" class="svg-label">いつもの gs の机</text>
+      <!-- ひも -->
+      <path class="draw d1" d="M112 84 C160 40 200 44 278 100" fill="none" stroke="var(--gold)" stroke-width="2.5"/>
+      <text x="170" y="38" text-anchor="middle" class="mono fade d2" font-size="12" fill="var(--wood)">push</text>
+      <path class="draw d5" d="M322 108 C390 70 440 66 488 104" fill="none" stroke="var(--green)" stroke-width="2.5"/>
+      <text x="410" y="58" text-anchor="middle" class="mono fade d6" font-size="12" fill="var(--green)">git clone</text>
+      <text x="300" y="210" text-anchor="middle" class="svg-label fade d8">書庫に全部そろっているから、正しい机に呼びもどせる</text>
+    </svg>
+  </div>
+  <div class="text">
+    <p>家ができあがると、書庫へ送る番です。ところが、作業机の上で迷子になりました。いつもの作業スペース（gs フォルダ）を探しても、読書メモの箱が見つかりません（ls）。</p>
+    <p>牧子さんは、もっと近い道を見つけました。家を作っている部屋の中から、そのままひもを引けばいい（VS Code のターミナル）。</p>
+    <p>名札は「master」から「main」にかけかえ（git branch -M main）、書庫の住所を登録して（git remote add）、ひもを引きます（git push）。途中で、書庫から「改行の印の書き方をそろえておきますね」というお知らせ（LF と CRLF）が来ましたが、それはただの「おしらせ」で、止まれの合図ではありませんでした。</p>
+    <p>そして家は、展示室に飾られました。</p>
+    <p class="url"><a href="https://makikonakaba-bit.github.io/dokusho-memo/">https://makikonakaba-bit.github.io/dokusho-memo/</a></p>
+    <p>あとで部屋の住所を見ると、箱が置かれていたのは、第四章で「ここは避ける」と決めたはずの <strong>OneDrive の棚の上</strong>でした。今回は、ノートも書けて、ひもも届きました。けれど OneDrive は、ノートの小さな紙を、自分のタイミングで雲に運んだり、置きかえたりします。このまま棚の上で書きつづけると、いつかノートがちぐはぐになるかもしれません。</p>
+    <p>久しぶりに開いた Git Bash の窓には、これまでの道のりが、全部残っていました。git を忘れた push、見つからなかった箱。それでも、どれも最後は「main -&gt; main」で終わっていました。</p>
+    <p>牧子さんは、家を書庫から、いつもの gs の机に<strong>呼びもどす</strong>ことにしました（git clone）。書庫には全部そろっていたので、2行打つだけで、家はまるごと、正しい机の上に届きました。書庫は、なくさないための場所であると同時に、<strong>いつでも机を引っ越せる場所</strong>でもあったのです。</p>
+    <p>作り終えて、牧子さんは思いました。自分が毎日使うものを作ると、困りごとが、そのまま「次の柱」になる。</p>
+    <p>本の内容を、もう少しまとめて覚えておきたい。家のどこかにある本を、探せるようにしたい。あふれる本を、整理したい。本のページの写真も、メモにつけておきたい。引き出しに入る量には限りがあるので、写真は小さくたたんでからしまうことになりそうです。</p>
+    <p>引き出しのある家は、毎朝ひとつ、新しい言葉をめくりながら、まだまだ大きくなりそうです。</p>
+  </div>
+</section>
+
 <!-- これから -->
-<section class="ch" id="ch8" data-title="これから">
+<section class="ch" id="ch9" data-title="これから">
   <div class="tag">これから</div>
   <h2>家を改装して、学校に届ける</h2>
   <div class="scene">
@@ -510,8 +684,11 @@ footer{max-width:860px;margin:0 auto;padding:30px 20px 70px;color:var(--muted);f
         <tr class="row" style="animation-delay:1.1s"><td>書庫の箱から、家を展示室に出す</td><td>GitHub Pagesで公開する</td><td class="ok">✓</td></tr>
         <tr class="row" style="animation-delay:1.3s"><td>二軒目の家を建てる（となりの箱から写す）</td><td>新しいリポジトリに clone して、cp -r でコピー</td><td class="ok">✓</td></tr>
         <tr class="row" style="animation-delay:1.5s"><td>家を改装する。改装のたびに、ノートに記録して書庫に届ける</td><td>アップグレード機能　機能ごとに add → commit → push</td><td class="ok">✓</td></tr>
-        <tr class="row" style="animation-delay:1.7s"><td>2つの家の箱に、説明書を入れる</td><td>README.md を書く（rich と mystery-tour）</td><td class="next">これから</td></tr>
-        <tr class="row" style="animation-delay:1.9s"><td>展示室の住所を、学校に届ける</td><td>G's Learning System から提出する</td><td class="next">これから</td></tr>
+        <tr class="row" style="animation-delay:1.7s"><td>2つの家の箱に、説明書を入れる</td><td>README.md を書く（rich と mystery-tour）</td><td class="ok">✓</td></tr>
+        <tr class="row" style="animation-delay:1.9s"><td>展示室の住所を、学校に届ける</td><td>G's Learning System から提出する</td><td class="ok">✓</td></tr>
+        <tr class="row" style="animation-delay:2.1s"><td>家に引き出しをつけ、荷物をたたんでしまう</td><td>localStorage と JSON（読書メモ）</td><td class="ok">✓</td></tr>
+        <tr class="row" style="animation-delay:2.3s"><td>あとから生まれるボタンは、棚の番人に見はってもらう</td><td>$("#list").on("click", ".toggle", …)</td><td class="ok">✓</td></tr>
+        <tr class="row" style="animation-delay:2.5s"><td>書庫から、正しい机に家を呼びもどす</td><td>git clone（OneDrive から gs へ）</td><td class="ok">✓</td></tr>
       </tbody>
     </table>
   </div>
@@ -590,6 +767,43 @@ footer{max-width:860px;margin:0 auto;padding:30px 20px 70px;color:var(--muted);f
     document.getElementById('kuji2').textContent='くじ r：'+(k+1)+'　／　くじ r2：'+(r2+1)+(r2===0?'（当たり！）':'（5回に1回の当たりは「1」）');
     showTicket(document.getElementById('ticket2'),b,k,r2===0);
   }));
+
+
+  // 第8章：開く・閉じる（あとから生まれるボタンは、#cards8 に見はってもらう）
+  const cards8=document.getElementById('cards8'), watch8=document.getElementById('watch8');
+  cards8.addEventListener('click',e=>{
+    const b=e.target.closest('.tg'); if(!b) return;
+    const c=b.closest('.bcard'); c.classList.toggle('open');
+    const on=c.classList.contains('open');
+    b.textContent=on?'閉じる':'開く';
+    watch8.textContent='#list の番人：「'+(on?'開く':'閉じる')+'」が押されました → カードの名札 open を'+(on?'つけました':'はずしました');
+  });
+
+
+  // 第8章：日めくり（2026年1月1日から何日目か ÷ 言葉の数 のあまり）
+  const say8=[
+    {t:'ひとり灯のもとに文をひろげて、見ぬ世の人を友とするぞ、こよなう慰むわざなる。',w:'吉田兼好『徒然草』'},
+    {t:'学びて思わざれば、すなわち罔し。思いて学ばざれば、すなわち殆し。',w:'孔子『論語』'},
+    {t:'ある本は味見をし、ある本は飲みこみ、ごく少数の本は、よくかんで消化すべきである。',w:'フランシス・ベーコン『随筆集』'},
+    {t:'学びて時にこれを習う、また説ばしからずや。',w:'孔子『論語』'}
+  ];
+  const wk8=['日','月','火','水','木','金','土'];
+  const start8=new Date(2026,0,1);
+  let d8=new Date(); d8.setHours(0,0,0,0);
+  function show8(flip){
+    const days=Math.floor((d8-start8)/86400000), k=days%say8.length;
+    const box=document.getElementById('hime8');
+    const put=()=>{
+      document.getElementById('hime8d').textContent=d8.getFullYear()+'年'+(d8.getMonth()+1)+'月'+d8.getDate()+'日（'+wk8[d8.getDay()]+'）';
+      document.getElementById('hime8t').textContent=say8[k].t;
+      document.getElementById('hime8w').textContent='― '+say8[k].w;
+      document.getElementById('hime8m').textContent=days+'日目 ÷ '+say8.length+' のあまり ＝ '+k+' 番目';
+      box.classList.remove('flip');
+    };
+    if(flip&&!reduce){box.classList.add('flip');setTimeout(put,300);}else put();
+  }
+  show8(false);
+  document.getElementById('hime8b').addEventListener('click',()=>{d8.setDate(d8.getDate()+1);show8(true);});
 
   // 4つの手順の輪（ゆっくり順番に光る）
   const nodes=[...document.querySelectorAll('#loop .step-node')];
